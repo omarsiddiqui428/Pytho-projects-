@@ -1,0 +1,22 @@
+from turtle import *
+import colorsys
+bgcolor("black")
+Turtle()
+h=0
+speed(0)
+tracer(30)
+for i in range(250):
+    c=colorsys.hsv_to_rgb(h,1,0.9)
+    pencolor(c)
+    forward(i)
+    pd()
+    circle(1,-400)
+    right(300)
+    pu()
+    forward(i)
+    left(200)
+    forward(i)
+    fd(20)
+    lt(28)
+    h += 0.009
+done()
