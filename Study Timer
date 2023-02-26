@@ -1,0 +1,29 @@
+#This is a timer that can help structure study sessions by allocating a certain amount of time to work and a certain amoujnt of time to rest.
+#it can be used to study according to the pomodoro method where the work time is 25 mins and the rest time is 5 mins. 
+
+import time
+import os
+
+def convert(t):
+    return t * 60
+
+def countdown(t,label):
+    while t:
+        min, sec = divmod(t, 60)
+        print(f"{label}: {min:02d}:{sec:02d}", end="\r")
+        time.sleep(1)
+        t -= 1
+
+def studyTimer(work,rest):
+    w = convert(work)
+    r = convert(rest)
+    countdown(w, "Work")
+    os.system("clear||cls")
+    countdown(r, "Rest")
+    os.system("clear||cls")
+
+
+work = int(input("Enter work time in minutes: "))
+rest = int(input("Enter rest time in minutes: "))
+
+studyTimer(work,rest)
