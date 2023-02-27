@@ -1,14 +1,20 @@
+##
+
+import os
 import tkinter as tk
 import fnmatch
-import os
 from pygame import mixer
 
-canvas = tk.Tk()
-canvas.title("Ipod Touch")
-canvas.geometry("600x800")
+#Main graphic for iPod
+canvas= tk.Tk()
+canvas.title("iPod")
+canvas.geometry("350x550")
 canvas.config(bg = 'lightgreen')
 
-rootpath = "/Users/omarsiddiqui/Desktop/music_files"
+#mapping to the folder of music mp3 files to load onto the iPod
+#the rootpath will have to be adjusted if running on another computer 
+#the rootpath has to map to a folder with mp3 files to be loaded into the iPod's playlist
+rootpath = "/Users/omarsiddiqui/Desktop/iPod Program/music_files" 
 pattern = "*.mp3"
 
 mixer.init()
@@ -19,30 +25,28 @@ next_img = tk.PhotoImage(file= "play-next-icon.png")
 prev_img = tk.PhotoImage(file= "play-previous-icon.png")
 stop_img = tk.PhotoImage(file= "stop-button-round-icon.png")
 
-def select():
+#to choose a song and play it
+def play(): 
     label.config(text = listBox.get("anchor"))
     mixer.music.load(rootpath + "/" + listBox.get("anchor"))
     mixer.music.play()
-
-def stop():
+    
+#to stop playing a song
+def stop(): 
     mixer.music.stop()
     listBox.select_clear('active')
-
-def play_next():
-    next_song = listBox.curselection()
-    next_song = next_song[0] + 1
-    next_song_name = listBox.get(next_song)
-    label.config(text = next_song_name)
-
-    mixer.music.load(rootpath + "/" + next_song_name)
-    mixer.music.play()
-
-    listBox.select_clear(0, 'end')
-    listBox.activate(next_song)
-    listBox.select_set(next)
-    play_next()
-
-def play_prev():
+    
+#to pause a song
+def pause_song(): 
+    if pauseButton["text"] == "Pause":
+        mixer.music.pause()
+        pauseButton["text"] = "Play"
+    else:
+        mixer.music.unpause()
+        pauseButton["text"] = "Pause"
+        
+#to play the previous song in the playlist
+def play_prev(): 
     prev_song = listBox.curselection()
     prev_song = prev_song[0] - 1
     prev_song_name = listBox.get(prev_song)
@@ -56,15 +60,24 @@ def play_prev():
     listBox.select_set(next)
     play_prev()
 
-def pause_song():
-    if pauseButton["text"] == "Pause":
-        mixer.music.pause()
-        pauseButton["text"] = "Play"
-    else:
-        mixer.music.unpause()
-        pauseButton["text"] = "Pause"
+#to play the next song in the playlist
+def play_next(): 
+    next_song = listBox.curselection()
+    next_song = next_song[0] + 1
+    next_song_name = listBox.get(next_song)
+    label.config(text = next_song_name)
 
-listBox = tk.Listbox(canvas, fg = "cyan", bg = "black", width = 100, font=('AHundredMiles',14))
+    mixer.music.load(rootpath + "/" + next_song_name)
+    mixer.music.play()
+
+    listBox.select_clear(0, 'end')
+    listBox.activate(next_song)
+    listBox.select_set(next)
+    play_next()
+
+
+#Creating the playlist box
+listBox = tk.Listbox(canvas, fg = "cyan", bg = "black", width = 100, font=('AHundredMiles',22))
 listBox.pack(padx = 15, pady = 15)
 
 label = tk.Label(canvas, text = '', bg = 'black', fg = 'yellow', font = ('ds-digital'))
@@ -79,7 +92,7 @@ prevButton.pack(pady = 15, in_ = top, side = 'left')
 stopButton = tk.Button(canvas,text = "Stop", image = stop_img, bg = 'black', borderwidth = 0, command = stop)
 stopButton.pack(pady = 15, in_ = top, side = 'left')
 
-playButton = tk.Button(canvas,text = "Play", image = play_img, bg = 'black', borderwidth = 0, command = select)
+playButton = tk.Button(canvas,text = "Play", image = play_img, bg = 'black', borderwidth = 0, command = play)
 playButton.pack(pady = 15, in_ = top, side = 'left')
 
 pauseButton = tk.Button(canvas, text="Pause", image=pause_img, bg='black', borderwidth=0, command = pause_song)
@@ -94,4 +107,6 @@ for root, dirs, files in os.walk(rootpath):
         listBox.insert('end', filename)
 
 canvas.mainloop()
+
+
 
