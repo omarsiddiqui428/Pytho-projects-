@@ -1,0 +1,55 @@
+#Tic Tac Toe
+
+def draw_board(nineBoard):
+    print("    0   1   2")
+    for i in range(3):
+        print("   ---" + " ---" + " ---")
+        row_str = str(i) + " |"
+        for j in range(3):
+            row_str += " " + nineBoard[i][j] + " |"
+        print(row_str)
+    print("   ---" + " ---" + " ---")
+
+def get_move(player):
+    while True:
+        move = input(f"Player {player}, enter your move (row,column). For example the top right space is 0,2: ")
+        if len(move) != 3 or move[1] != ',':
+            print("Invalid input. Please enter in the format row,column.")
+            continue
+        row = int(move[0])
+        col = int(move[2])
+        if row < 0 or row > 2 or col < 0 or col > 2:
+            print("Invalid input. Please enter a valid row and column number (0-2).")
+            continue
+        return row, col
+
+def check_win(nineBoard, player):
+    for i in range(3):
+        if nineBoard[i][0] == nineBoard[i][1] == nineBoard[i][2] == player:
+            return True
+        if nineBoard[0][i] == nineBoard[1][i] == nineBoard[2][i] == player:
+            return True
+    if nineBoard[0][0] == nineBoard[1][1] == nineBoard[2][2] == player:
+        return True
+    if nineBoard[0][2] == nineBoard[1][1] == nineBoard[2][0] == player:
+        return True
+    return False
+
+def play_game():
+    nineBoard = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+    print("Welcome to Tic Tac Toe!")
+    draw_board(nineBoard)
+    for turn in range(9):
+        player = 'X' if turn % 2 == 0 else 'O'
+        row, col = get_move(player)
+        if nineBoard[row][col] != ' ':
+            print("That space is taken. Please choose another space.")
+            continue
+        nineBoard[row][col] = player
+        draw_board(nineBoard)
+        if check_win(nineBoard, player):
+            print(f"Congratulations! Player {player} wins!")
+            return
+    print("It's a tie!")
+
+play_game()
